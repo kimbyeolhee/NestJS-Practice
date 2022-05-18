@@ -66,4 +66,81 @@ router.post("/cats", (req, res) => {
   }
 });
 
+// UPDATE
+/*
+ * 고양이 정보 수정 api
+ */
+router.put("/cats/:id", (req, res) => {
+  try {
+    const params = req.params;
+    const body = req.body;
+    let result;
+    Cat.forEach((cat) => {
+      if (cat.id === params.id) {
+        cat = body;
+        result = cat;
+      }
+    });
+    res.status(200).send({
+      success: true,
+      data: {
+        cat: result,
+      },
+    });
+  } catch (error: any) {
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+/*
+ * 고양이 데이터 부분적 업데이트
+ */
+router.patch("/cats/:id", (req, res) => {
+  try {
+    const params = req.params;
+    const body = req.body;
+    let result;
+    Cat.forEach((cat) => {
+      if (cat.id === params.id) {
+        cat = { ...cat, ...body };
+        result = cat;
+      }
+    });
+    res.status(200).send({
+      success: true,
+      data: {
+        cat: result,
+      },
+    });
+  } catch (error: any) {
+    res.status(400).send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// DELETE
+/*
+ * 고양이 정보 삭제 api
+ */
+router.delete("/cats/:id", (req, res) => {
+  try {
+    const params = req.params;
+    const newCat = Cat.filter((cat) => cat.id !== params.id);
+    res.status(200).send({
+      success: true,
+      data: newCat,
+    });
+  } catch (error: any) {
+    res.status(400).send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 export default router;
